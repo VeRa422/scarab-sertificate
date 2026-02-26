@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Luxor: Ancient Secrets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Treasure Room - Khepri Quest</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Philosopher&display=swap');
 
@@ -22,221 +23,496 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- UI TOP --- */
         .ui-top {
             position: absolute; top: 20px;
             width: 100%; display: flex; flex-direction: column;
             gap: 15px; align-items: center; z-index: 100;
         }
-        .lives { display: flex; gap: 20px; }
-        .ankh { font-size: 45px; color: #fcc201; text-shadow: 0 0 15px #fcc201; transition: 0.8s; }
-        .ankh.lost { opacity: 0; transform: scale(0.5) translateY(50px); filter: blur(5px); }
-        .progress-container { display: flex; gap: 8px; }
-        .step { width: 35px; height: 12px; border: 2px solid #d4af37; background: rgba(0,0,0,0.8); transition: 0.6s; }
-        .step.active { background: #fcc201; box-shadow: 0 0 20px #fcc201; }
 
-        /* --- СКАРАБЕЙ --- */
+        .progress-container {
+            width: 350px; height: 45px;
+            border: 3px solid #d4af37;
+            background: rgba(0,0,0,0.9);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        .progress-fill {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 0%;
+            background: linear-gradient(to right, #fcc201, #fffa8a, #d4af37);
+            box-shadow: 0 0 25px #fcc201;
+            transition: width 1.2s ease-out;
+        }
+        .progress-text {
+            position: absolute;
+            width: 100%; text-align: center;
+            line-height: 45px;
+            font-family: 'Cinzel Decorative';
+            font-size: 20px;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+            z-index: 1;
+        }
+
         .scarab-wrap {
             position: absolute;
-            width: 90px; height: 90px;
+            width: 100px; height: 100px;
             z-index: 10;
             transition: transform 0.1s linear;
+            cursor: pointer;
         }
         .scarab-img {
             width: 100%; height: 100%;
             background: url('1.png') center/contain no-repeat;
-            filter: drop-shadow(0 0 10px #fcc201);
+            filter: drop-shadow(0 0 15px #fcc201);
         }
-        .wings-motion { animation: flap 0.3s infinite ease-in-out; }
+        .wings-motion { animation: flap 0.35s infinite ease-in-out; }
         @keyframes flap {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); filter: brightness(1.2); }
+            50% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #fcc201); }
         }
-/* --- НАСТОЯЩЕЕ ЗОЛОТО --- */
+
         #countdown-box {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Cinzel Decorative', cursive;
-            font-size: 220px; /* Слегка увеличил для мощи */
-            
-            /* Яркий золотой градиент с выраженным бликом по центру */
-            background: linear-gradient(
-                to bottom, 
-                #fcf3ad 0%,   /* Светлый верх */
-                #fcc201 40%,  /* Золотая основа */
-                #fffa8a 50%,  /* ЯРКИЙ БЛИК посередине */
-                #d4af37 60%,  /* Темное золото */
-                #8a6d1c 100%  /* Глубокий низ */
-            );
+            font-size: 220px;
+            background: linear-gradient(to bottom, #fcf3ad 0%, #fcc201 40%, #fffa8a 50%, #d4af37 60%, #8a6d1c 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* Чистые тени без коричневой грязи */
             filter: drop-shadow(0 0 15px rgba(255, 250, 138, 0.6));
-            text-shadow: 
-                2px 2px 0px rgba(0,0,0,0.3), /* Легкий контур для четкости */
-                0px 0px 30px rgba(252, 194, 1, 0.8); /* Золотое сияние */
-            
             z-index: 3000;
             pointer-events: none;
             display: none;
             font-weight: 900;
         }
-
         .count-anim { animation: countZoom 0.8s ease-out forwards; }
-
         @keyframes countZoom {
-            0% { 
-                transform: translate(-50%, -50%) scale(0.3) rotate(-5deg); 
-                opacity: 0; 
-                filter: brightness(3) blur(15px);
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.1) rotate(0deg); 
-                opacity: 1; 
-                filter: brightness(1.5) blur(0px);
-            }
-            100% { 
-                transform: translate(-50%, -50%) scale(1.8) rotate(5deg); 
-                opacity: 0; 
-                filter: brightness(1);
-            }
+            0% { transform: translate(-50%, -50%) scale(0.3) rotate(-5deg); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.15) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.8) rotate(5deg); opacity: 0; }
         }
-        /* --- СТАРТОВЫЙ ЭКРАН --- */
+
         #start-screen {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.9);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 4000;
+            text-align: center;
+            padding: 20px;
+        }
+        #start-screen h1 {
+            font-family: 'Cinzel Decorative';
+            font-size: 55px;
+            text-shadow: 0 0 25px #fcc201;
+            margin-bottom: 20px;
+        }
+        #start-screen p {
+            font-size: 19px;
+            max-width: 650px;
+            line-height: 1.7;
+            margin-bottom: 35px;
         }
 
-        /* --- ПЛАНШЕТ С ВОПРОСОМ --- */
         .tablet {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
-            width: 90%; max-width: 450px; 
+            width: 90%; max-width: 550px;
             background: rgba(10, 5, 0, 0.98);
-            border: 2px solid #d4af37; padding: 30px;
-            text-align: center; z-index: 1000;
+            border: 3px solid #d4af37;
+            padding: 45px;
+            text-align: center;
+            z-index: 1000;
             opacity: 0; visibility: hidden;
             transition: 0.4s;
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
         }
-        .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .tablet.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .tablet h2 {
+            font-family: 'Cinzel Decorative';
+            color: #d4af37;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        .tablet p {
+            font-size: 24px;
+            margin: 25px 0;
+            color: #fff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid #d4af37;
+            color: #fcc201;
+            font-family: 'Philosopher';
+            font-size: 18px;
+        }
+        input::placeholder { color: rgba(252, 194, 1, 0.5); }
+        input:focus { outline: none; box-shadow: 0 0 15px #fcc201; }
 
         .choice-btn {
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            background: #111; border: 1px solid #d4af37; color: #fcc201;
-            font-family: 'Cinzel Decorative'; font-size: 18px;
-            cursor: pointer; transition: 0.3s;
+            display: inline-block;
+            padding: 16px 35px;
+            margin: 12px 8px;
+            background: #111;
+            border: 2px solid #d4af37;
+            color: #fcc201;
+            font-family: 'Cinzel Decorative';
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .choice-btn:hover { background: #fcc201; color: #000; }
-
-        /* --- ЭФФЕКТ ШОКА --- */
-        .shock-hit { 
-            filter: brightness(0) invert(1) drop-shadow(0 0 50px #00ffff) !important; 
-            animation: shockAnim 1.2s forwards;
-            pointer-events: none;
-        }
-        @keyframes shockAnim {
-            0% { transform: scale(1); }
-            10%, 30%, 50% { transform: translate(15px, -15px); }
-            20%, 40%, 60% { transform: translate(-15px, 15px); }
-            100% { transform: scale(0); opacity: 0; filter: blur(30px); }
+        .choice-btn:hover {
+            background: #fcc201;
+            color: #000;
+            box-shadow: 0 0 25px #fcc201;
+            transform: scale(1.05);
         }
 
-        /* --- ПЕСОК --- */
-        #sand-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2000; }
-        .sand-particle { position: absolute; background: #fcc201; border-radius: 50%; box-shadow: 0 0 6px #d4af37; }
-        #game-over-ui { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 2100; text-align: center; display: none; }
+ /* НОВЫЙ СЕРТИФИКАТ */
+#certificate {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+    overflow: hidden;
+}
+
+.papyrus {
+    width: 90vw;
+    max-width: 1100px;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(to bottom, #f4e8c8 0%, #e8d4a8 50%, #f4e8c8 100%);
+    border: 3px solid #8b6914;
+    box-shadow: 
+        0 0 0 1px #d4af37,
+        0 20px 60px rgba(0,0,0,0.8),
+        inset 0 0 80px rgba(139, 105, 20, 0.2);
+    padding: clamp(20px, 3vh, 35px) clamp(30px, 4vw, 55px);
+    position: relative;
+    font-family: 'Philosopher', serif;
+    color: #3a2a15;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: clamp(6px, 1vh, 10px);
+}
+
+.papyrus::before,
+.papyrus::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    left: 0;
+    background-image: 
+        repeating-linear-gradient(90deg, 
+            #8b6914 0px, transparent 2px, transparent 8px, #8b6914 10px
+        );
+}
+.papyrus::before { top: -3px; }
+.papyrus::after { bottom: -3px; }
+
+.pap-title {
+    text-align: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(18px, 2.8vw, 32px);
+    color: #8b6914;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px double #8b6914;
+    padding-bottom: clamp(4px, 0.8vh, 8px);
+}
+
+.pap-subtitle {
+    text-align: center;
+    font-size: clamp(9px, 1.1vw, 12px);
+    font-style: italic;
+    color: #6b5214;
+    margin: clamp(3px, 0.5vh, 5px) 0;
+}
+
+.pap-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    gap: clamp(5px, 0.8vh, 10px) clamp(10px, 2vw, 20px);
+    align-items: center;
+}
+
+.pap-certifies {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: clamp(11px, 1.3vw, 15px);
+    color: #6b5214;
+    margin: 0;
+}
+
+.pap-name {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(24px, 3.8vw, 42px);
+    color: #8b6914;
+    margin: 0;
+    text-decoration: underline;
+    text-decoration-color: #d4af37;
+    text-decoration-thickness: 2px;
+}
+
+.pap-info {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 40px);
+    flex-wrap: wrap;
+    font-size: clamp(11px, 1.3vw, 14px);
+    margin: 0;
+}
+
+.pap-mission-block {
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.pap-mission-intro {
+    font-size: clamp(11px, 1.3vw, 15px);
+    color: #6b5214;
+    margin: 0 0 clamp(3px, 0.5vh, 5px) 0;
+}
+
+.pap-mission-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(16px, 2.4vw, 28px);
+    color: #8b6914;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.pap-achievements {
+    grid-column: 1 / -1;
+    background: rgba(212, 175, 55, 0.12);
+    border: 2px solid #d4af37;
+    padding: clamp(8px, 1.5vh, 15px);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(4px, 0.7vh, 8px) clamp(10px, 2vw, 18px);
+    font-size: clamp(10px, 1.2vw, 13px);
+    line-height: 1.4;
+}
+
+.pap-footer {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: clamp(12px, 2vw, 25px);
+    padding-top: clamp(6px, 1vh, 12px);
+    border-top: 2px solid #8b6914;
+}
+
+.pap-signed {
+    text-align: left;
+    font-size: clamp(9px, 1.1vw, 12px);
+    color: #6b5214;
+    line-height: 1.4;
+}
+
+.pap-seal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(4px, 0.7vh, 8px);
+}
+
+.pap-seal img {
+    width: clamp(45px, 6vw, 70px);
+    height: auto;
+    filter: sepia(0.3) contrast(1.2);
+}
+
+.pap-date {
+    font-size: clamp(8px, 1vw, 11px);
+    color: #6b5214;
+    font-style: italic;
+}
+
+.pap-quote {
+    text-align: right;
+    font-size: clamp(9px, 1.1vw, 12px);
+    font-style: italic;
+    color: #6b5214;
+    line-height: 1.3;
+}
+
+@media print {
+    body * { visibility: hidden; }
+    #certificate, #certificate * { visibility: visible; }
+    #certificate {
+        position: fixed;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background: white;
+        padding: 0; margin: 0;
+    }
+    .papyrus {
+        width: 100%; height: 100%;
+        max-width: none;
+    }
+    @page { size: landscape; margin: 0; }
+}
+
+@media (max-width: 900px) {
+    .pap-achievements { grid-template-columns: 1fr; }
+    .pap-footer { 
+        grid-template-columns: 1fr; 
+        text-align: center; 
+        gap: 10px;
+    }
+    .pap-signed, .pap-quote { text-align: center; }
+}
     </style>
 </head>
 <body>
 
 <div class="tomb" id="stage">
     <div id="start-screen">
-        <h1 style="font-family:'Cinzel Decorative'; font-size: 60px; text-shadow: 0 0 20px #fcc201; margin-bottom: 20px;">LUXOR</h1>
-        <button class="choice-btn" id="init-btn" style="max-width: 300px;">ENTER THE TOMB</button>
+        <h1>🏛️ THE TREASURE ROOM 🏛️</h1>
+        <p>
+            You have reached the sacred chamber!<br>
+            The <strong>Golden Heart of Ra</strong> awaits...<br><br>
+            But the <strong>Guardian Scarab</strong> protects it.<br>
+            He wants to know who you are.<br><br>
+            Catch the scarab <strong>3 times</strong> and answer his questions!<br>
+            Each time he will fly <strong>faster</strong>!
+        </p>
+        <button class="choice-btn" id="init-btn">BEGIN THE TRIAL</button>
     </div>
 
     <div id="countdown-box"></div>
 
     <div class="ui-top">
         <div class="progress-container">
-            <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
-            <div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
-        </div>
-        <div class="lives" id="lives-box">
-            <span class="ankh">☥</span><span class="ankh">☥</span><span class="ankh">☥</span>
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-text" id="progress-text">TREASURE: 0%</div>
         </div>
     </div>
 
-    <div id="sand-container"></div>
-    <div id="game-over-ui">
-        <h1 style="font-family:'Cinzel Decorative'; font-size: 50px; color: #fcc201; text-shadow: 0 0 20px #000;">BURIED ALIVE</h1>
-        <button class="choice-btn" onclick="location.reload()">TRY AGAIN</button>
-    </div>
-    
     <div class="tablet" id="tablet">
-        <h2 style="font-family: 'Cinzel Decorative'; color: #d4af37;">RIDDLE</h2>
-        <p id="q-text" style="font-size: 2.2em; margin: 20px 0; color: #fff;"></p>
-        <div id="options"></div>
+        <h2>THE GUARDIAN'S QUESTION</h2>
+        <div id="question-content"></div>
+    </div>
+
+ <!-- НОВЫЙ СЕРТИФИКАТ -->
+<div id="certificate">
+    <div class="papyrus">
+        <h1 class="pap-title">Certificate of the Hero of Egypt</h1>
+        <p class="pap-subtitle">By the sacred power of Ra, Khepri, and all the gods of ancient Egypt</p>
+
+        <div class="pap-body">
+            <p class="pap-certifies">This papyrus hereby certifies that</p>
+
+            <div class="pap-name" id="cert-name">HERO NAME</div>
+
+            <div class="pap-info">
+                <span><strong>Age:</strong> <span id="cert-age">—</span></span>
+                <span><strong>From:</strong> <span id="cert-from">—</span></span>
+            </div>
+
+            <div class="pap-mission-block">
+                <p class="pap-mission-intro">has successfully completed the legendary quest</p>
+                <h2 class="pap-mission-title">The Solar Mission of Khepri</h2>
+            </div>
+
+            <div class="pap-achievements">
+                <div>✓ Found all 10 Sacred Artifacts</div>
+                <div>✓ Passed the Sphinx's test</div>
+                <div>✓ Defeated Serpent Apophis</div>
+                <div>✓ Survived the Final Battle</div>
+                <div>✓ Solved 7 Maze Riddles</div>
+                <div>✓ Returned the Heart of Ra</div>
+            </div>
+        </div>
+
+        <div class="pap-footer">
+            <div class="pap-signed">
+                <strong>Signed:</strong> Prof. N. Jones<br>
+                <em>Cairo Museum</em><br>
+                <strong>Witnessed by:</strong> Scarab Khepri
+            </div>
+
+            <div class="pap-seal">
+                <img src="4.png" alt="Seal">
+                <p class="pap-date" id="cert-date">—</p>
+            </div>
+
+            <p class="pap-quote">
+                "May the light of Ra<br>
+                guide your path<br>
+                forever."
+            </p>
+        </div>
     </div>
 </div>
-
 <script>
+    let playerData = { name: '', age: '', from: '' };
+
     const questions = [
-        { q: "... apple", a: "an" }, { q: "... cat", a: "a" },
-        { q: "... hour", a: "an" }, { q: "... dog", a: "a" },
-        { q: "... ant", a: "an" }, { q: "... ball", a: "a" },
-        { q: "... eye", a: "an" }, { q: "... tree", a: "a" },
-        { q: "... ice", a: "an" }, { q: "... book", a: "a" }
+        { id: 'name', text: 'What is your name?', type: 'text', placeholder: 'Enter your name...' },
+        { id: 'age', text: 'How old are you?', type: 'text', placeholder: 'Enter your age...' },
+        { id: 'from', text: 'Where are you from?', type: 'text', placeholder: 'City or Country...' }
     ];
 
     let currentIdx = 0;
-    let lives = 3;
+    let scarabSpeed = 1.5;
 
     function playSfx(file) {
         const audio = new Audio(file);
         audio.play().catch(() => {});
     }
 
-    // ЛОГИКА СТАРТА
-  // Слушатель для кнопки СТАРТ
     document.getElementById('init-btn').onclick = () => {
-        document.getElementById('start-screen').style.display = 'none'; 
-        // Звук запускаем ровно здесь
-        playSfx('1.mp3'); 
-        startCountdown(); 
+        document.getElementById('start-screen').style.display = 'none';
+        playSfx('1.mp3');
+        startCountdown();
     };
 
     function startCountdown() {
         const box = document.getElementById('countdown-box');
-        const sequence = ['3', '2', '1', 'GO!'];
+        const sequence = ['3', '2', '1', 'CATCH!'];
         box.style.display = 'block';
 
         let i = 0;
-        
-        // Функция для отображения шага
         function nextStep() {
             if (i < sequence.length) {
                 box.innerText = sequence[i];
                 box.classList.remove('count-anim');
-                void box.offsetWidth; // Сброс анимации
+                void box.offsetWidth;
                 box.classList.add('count-anim');
-                
                 i++;
-                // Ускоренный интервал — 800мс вместо 1000мс
-                setTimeout(nextStep, 800); 
+                setTimeout(nextStep, 800);
             } else {
                 box.style.display = 'none';
-                createScarab(); 
+                createScarab();
             }
         }
-
-        nextStep(); // Запускаем первый шаг мгновенно
+        nextStep();
     }
 
     function createScarab() {
@@ -246,27 +522,26 @@
         img.className = 'scarab-img wings-motion';
         wrap.appendChild(img);
         document.getElementById('stage').appendChild(wrap);
-        
-        let x = Math.random() * (window.innerWidth - 100);
-        let y = Math.random() * (window.innerHeight - 300) + 150;
+
+        let x = Math.random() * (window.innerWidth - 120);
+        let y = Math.random() * (window.innerHeight - 350) + 150;
         let angle = Math.random() * Math.PI * 2;
-        let speed = 1.5; 
-        let flip = 1; 
+        let flip = 1;
         let noise = Math.random() * 100;
 
         function drive() {
-            if(wrap.dataset.stop === "true") return;
-            noise += 0.02; 
-            angle += Math.sin(noise) * 0.03; 
-            x += Math.cos(angle) * speed;
-            y += Math.sin(angle) * speed;
+            if (wrap.dataset.stop === "true") return;
+            noise += 0.02;
+            angle += Math.sin(noise) * 0.03;
+            x += Math.cos(angle) * scarabSpeed;
+            y += Math.sin(angle) * scarabSpeed;
 
-            const margin = 90;
-            const topLimit = 110;
-            if(x < 0) { angle = 0; flip = 1; x = 1; }
-            else if(x > window.innerWidth - margin) { angle = Math.PI; flip = -1; x = window.innerWidth - margin - 1; }
-            if(y < topLimit) { angle = Math.PI / 2; y = topLimit + 1; }
-            else if(y > window.innerHeight - margin) { angle = -Math.PI / 2; y = window.innerHeight - margin - 1; }
+            const margin = 100;
+            const topLimit = 120;
+            if (x < 0) { angle = 0; flip = 1; x = 1; }
+            else if (x > window.innerWidth - margin) { angle = Math.PI; flip = -1; x = window.innerWidth - margin - 1; }
+            if (y < topLimit) { angle = Math.PI / 2; y = topLimit + 1; }
+            else if (y > window.innerHeight - margin) { angle = -Math.PI / 2; y = window.innerHeight - margin - 1; }
 
             wrap.style.left = x + 'px';
             wrap.style.top = y + 'px';
@@ -280,74 +555,65 @@
             playSfx('2.mp3');
             wrap.dataset.stop = "true";
             wrap.style.opacity = "0";
-            window.lastScarab = wrap; 
-            showQuest();
+            window.lastScarab = wrap;
+            showQuestion();
         };
     }
 
-    function showQuest() {
+    function showQuestion() {
         const q = questions[currentIdx];
-        document.getElementById('q-text').innerText = q.q;
-        const opt = document.getElementById('options');
-        opt.innerHTML = '';
-        ['a', 'an'].forEach(o => {
-            const btn = document.createElement('button');
-            btn.className = 'choice-btn';
-            btn.innerText = o;
-            btn.onclick = () => check(o);
-            opt.appendChild(btn);
-        });
+        const content = document.getElementById('question-content');
+        content.innerHTML = `
+            <p>${q.text}</p>
+            <input type="text" id="answer-input" placeholder="${q.placeholder}">
+            <button class="choice-btn" onclick="submitAnswer()">SUBMIT</button>
+        `;
         document.getElementById('tablet').classList.add('active');
     }
 
-    function check(ans) {
+    function submitAnswer() {
+        const value = document.getElementById('answer-input').value.trim();
+        if (!value) return;
+        
+        playerData[questions[currentIdx].id] = value;
         document.getElementById('tablet').classList.remove('active');
-        if(ans === questions[currentIdx].a) {
-            playSfx('3.mp3');
-            document.querySelectorAll('.step')[currentIdx].classList.add('active');
-            currentIdx++;
-            if(window.lastScarab) window.lastScarab.remove();
-            if(currentIdx < questions.length) setTimeout(createScarab, 600);
-            else { playSfx('5.mp3'); end("VICTORY!"); }
+        playSfx('3.mp3');
+
+        currentIdx++;
+        const progress = (currentIdx / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = progress + '%';
+        document.getElementById('progress-text').innerText = `TREASURE: ${Math.round(progress)}%`;
+
+        if (window.lastScarab) window.lastScarab.remove();
+        scarabSpeed += 0.7;
+
+        if (currentIdx < questions.length) {
+            setTimeout(createScarab, 900);
         } else {
-            playSfx('4.mp3');
-            lives--;
-            const ankhs = document.querySelectorAll('.ankh');
-            if(ankhs[lives]) ankhs[lives].classList.add('lost');
-            const el = window.lastScarab;
-            if (el) { el.style.opacity = "1"; el.classList.add('shock-hit'); }
-            if(lives <= 0) { setTimeout(startSandstorm, 800); }
-            else { setTimeout(createScarab, 1400); }
+            playSfx('5.mp3');
+            setTimeout(showCertificate, 1800);
         }
     }
 
-    function startSandstorm() {
-        playSfx('6.mp3');
-        const container = document.getElementById('sand-container');
-        document.getElementById('game-over-ui').style.display = 'block';
-        let floorLevel = 0;
-        const storm = setInterval(() => {
-            if (floorLevel > window.innerHeight) clearInterval(storm);
-            for(let i=0; i<40; i++) { 
-                const sand = document.createElement('div');
-                sand.className = 'sand-particle';
-                const size = Math.random() * 8 + 4;
-                sand.style.width = size + 'px'; sand.style.height = size + 'px';
-                sand.style.left = Math.random() * 100 + 'vw';
-                container.appendChild(sand);
-                const stopY = window.innerHeight - floorLevel - Math.random() * 40;
-                sand.animate([{ top: '-50px', opacity: 1 }, { top: stopY + 'px', opacity: 1 }], 
-                { duration: 400 + Math.random() * 400, fill: 'forwards' });
-            }
-            floorLevel += 12;
-        }, 40);
+    function showCertificate() {
+        document.getElementById('cert-name').innerText = playerData.name || 'BRAVE EXPLORER';
+        document.getElementById('cert-age').innerText = playerData.age || '—';
+        document.getElementById('cert-from').innerText = playerData.from || '—';
+
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('en-US', { 
+            year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        document.getElementById('cert-date').innerText = dateStr;
+
+        document.getElementById('certificate').style.display = 'flex';
     }
 
-    function end(m) {
-        document.getElementById('q-text').innerText = m;
-        document.getElementById('options').innerHTML = '<button class="choice-btn" onclick="location.reload()">REPLAY</button>';
-        document.getElementById('tablet').classList.add('active');
-    }
+    document.getElementById('certificate').onclick = (e) => {
+        if (e.target.id === 'certificate') {
+            if (confirm('Exit and play again?')) location.reload();
+        }
+    };
 </script>
 </body>
 </html>
