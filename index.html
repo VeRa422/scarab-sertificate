@@ -26,27 +26,33 @@
         /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
         #start-screen {
             position: absolute; inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 4000; text-align: center;
         }
 
         .intro-box {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(15, 10, 0, 0.95);
             padding: 40px;
             border-radius: 20px;
             border: 2px solid #d4af37;
-            box-shadow: 0 0 40px rgba(0,0,0,1);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
             max-width: 800px;
             pointer-events: all;
         }
 
+        #start-screen h1 {
+            font-family: 'Cinzel Decorative'; font-size: clamp(30px, 5vw, 55px);
+            text-shadow: 0 0 25px #fcc201; margin: 0 0 20px 0;
+        }
+
         .choice-btn {
-            padding: 15px 30px; background: #111; border: 2px solid #d4af37;
+            padding: 15px 35px; background: #111; border: 2px solid #d4af37;
             color: #fcc201; font-family: 'Cinzel Decorative'; 
             cursor: pointer; transition: 0.3s; font-size: 18px;
+            letter-spacing: 2px;
         }
-        .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
+        .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 25px #fcc201; }
 
         /* --- ИНТЕРФЕЙС ИГРЫ --- */
         .ui-top {
@@ -56,35 +62,35 @@
         }
 
         .progress-container {
-            width: 350px; height: 45px;
+            width: 380px; height: 45px;
             border: 3px solid #d4af37; background: rgba(0,0,0,0.8);
             position: relative; overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
         .progress-fill {
             position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
-            background: linear-gradient(to right, #fcc201, #fffa8a, #d4af37);
+            background: linear-gradient(to right, #8b6b10, #fcc201, #fffa8a, #d4af37);
             transition: width 0.8s ease-out;
         }
         .progress-text {
             position: absolute; width: 100%; text-align: center;
             line-height: 45px; font-family: 'Cinzel Decorative';
-            font-size: 18px; color: #fff; z-index: 1;
+            font-size: 16px; color: #fff; z-index: 1; text-shadow: 1px 1px 2px #000;
         }
 
         /* --- СКАРАБЕЙ --- */
         .scarab-wrap {
             position: absolute; width: 100px; height: 100px; z-index: 10;
-            cursor: pointer;
+            cursor: pointer; filter: drop-shadow(0 0 15px #fcc201);
         }
         .scarab-img {
             width: 100%; height: 100%;
             background: url('1.png') center/contain no-repeat;
-            filter: drop-shadow(0 0 15px #fcc201);
         }
         .wings-motion { animation: flap 0.35s infinite ease-in-out; }
         @keyframes flap {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); filter: brightness(1.4); }
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.15); filter: brightness(1.5); }
         }
 
         /* --- ПЛАНШЕТ С ВОПРОСАМИ --- */
@@ -92,44 +98,45 @@
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
             width: 90%; max-width: 500px;
-            background: rgba(15, 10, 0, 0.95);
-            border: 3px solid #d4af37; padding: 30px;
+            background: rgba(15, 10, 0, 0.98);
+            border: 3px solid #d4af37; padding: 35px;
             text-align: center; z-index: 1000;
-            opacity: 0; visibility: hidden; transition: 0.5s;
+            opacity: 0; visibility: hidden; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 60px #000;
         }
         .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
         
         input[type="text"] {
-            width: 80%; padding: 12px; margin: 15px 0;
-            background: #000; border: 2px solid #d4af37;
-            color: #fcc201; font-family: 'Philosopher'; font-size: 20px; text-align: center;
+            width: 85%; padding: 12px; margin: 20px 0;
+            background: #0a0a0a; border: 1px solid #d4af37;
+            color: #fcc201; font-family: 'Philosopher'; font-size: 22px; text-align: center;
+            outline: none;
         }
 
-        /* --- ФИНАЛЬНЫЙ ЭФФЕКТ И СЕРТИФИКАТ (UPDATED) --- */
+        /* --- ФИНАЛЬНЫЙ ЭФФЕКТ И СЕРТИФИКАТ --- */
         #final-flash {
             position: fixed; inset: 0; 
-            /* Больше золотого свечения */
-            background: radial-gradient(circle, #fff 0%, #fff7cc 40%, #fcc201 100%);
+            background: radial-gradient(circle, #fff 0%, #fff7cc 30%, #fcc201 60%, #8b6b10 100%);
             z-index: 4500; opacity: 0; pointer-events: none; 
             transition: opacity 2.5s ease-in-out;
         }
 
         #certificate {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.92);
             display: flex; justify-content: center; align-items: center; 
             z-index: 5000; 
             opacity: 0; visibility: hidden;
-            transition: opacity 3.5s ease-in-out; /* Очень медленное появление */
+            transition: opacity 3.5s ease-in-out;
         }
         #certificate.show-final { opacity: 1; visibility: visible; }
 
         .papyrus {
-            position: relative; width: 90%; max-width: 600px;
+            position: relative; width: 90%; max-width: 650px;
             background: #e4d5b7 url('https://www.transparenttextures.com/patterns/old-map.png');
-            padding: 50px; border: 2px solid #bc9a5c;
+            padding: 60px; border: 2px solid #bc9a5c;
             color: #3d2b1f; text-align: center;
-            box-shadow: 0 0 100px rgba(252, 194, 1, 0.4);
-            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 99%, 0% 96%, 1% 5%);
+            box-shadow: 0 0 100px rgba(252, 194, 1, 0.2);
+            clip-path: polygon(1% 2%, 99% 0%, 100% 98%, 2% 100%, 0% 50%);
         }
     </style>
 </head>
@@ -141,9 +148,12 @@
     <div id="start-screen">
         <div class="intro-box">
             <h1>THE HALL OF RA</h1>
-            <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
-                The artifacts are restored! Ignite the Solar Heart.<br>
-                Catch Khepri to receive your Eternal Reward.
+            <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px; color: #d4af37;">
+                The 10 stolen artifacts are returned to the Golden Barge!<br>
+                But to ignite the Solar Heart, Ra must know the story of his Hero.
+            </p>
+            <p style="font-size: 18px; font-style: italic; margin-bottom: 30px; color: #fcc201;">
+                Catch Khepri the Golden Scarab and answer the 7 sacred questions to receive your eternal Reward.
             </p>
             <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
         </div>
@@ -152,27 +162,47 @@
     <div class="ui-top">
         <div class="progress-container">
             <div class="progress-fill" id="progress-fill"></div>
-            <div class="progress-text" id="progress-text">RITUAL PROGRESS: 0%</div>
+            <div class="progress-text" id="progress-text">SACRED RITUAL PROGRESS: 0%</div>
         </div>
     </div>
 
     <div class="tablet" id="tablet">
+        <h2 style="font-family:'Cinzel Decorative'; color: #fcc201; margin-top: 0;">SACRED SCROLL</h2>
         <div id="question-content"></div>
     </div>
 
     <div id="certificate">
         <div class="papyrus">
-            <h1 style="font-family: 'Cinzel Decorative'; color: #8b4513;">BLESSED BY RA</h1>
-            <p>This sacred scroll proclaims that</p>
-            <div id="cert-name" style="font-family: 'Cinzel Decorative'; font-size: 32px; color: #b8860b; margin: 15px 0;">HERO NAME</div>
-            <p>has successfully restored the Solar Barge. The Light of Egypt shall shine upon you.</p>
-            <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0;">
-                <span>Age: <span id="cert-age"></span></span>
-                <span>Origins: <span id="cert-from"></span></span>
+            <h1 style="font-family: 'Cinzel Decorative'; color: #8b4513; font-size: 38px; margin-bottom: 10px;">CERTIFICATE OF THE HERO</h1>
+            <p style="font-size: 18px; margin-bottom: 5px;">By the sacred power of Ra and the light of the Sun</p>
+            <p style="font-weight: bold; margin-bottom: 20px;">This papyrus hereby certifies that</p>
+            
+            <div id="cert-name" style="font-family: 'Cinzel Decorative'; font-size: 36px; color: #b8860b; margin: 10px 0; text-shadow: 1px 1px 0px #fff;">HERO NAME</div>
+            
+            <div style="font-size: 20px; margin: 15px 0;">
+                <span style="color: #8b4513; font-weight: bold;">Age:</span> <span id="cert-age"></span> | 
+                <span style="color: #8b4513; font-weight: bold;">From:</span> <span id="cert-from"></span>
             </div>
-            <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
-                <div style="text-align: left; font-size: 14px;">Witnessed by Prof. Jones<br><span id="cert-date"></span></div>
-                <img src="4.png" width="50">
+
+            <p style="font-style: italic; font-size: 18px; margin: 20px 0;">has successfully restored the Solar Barge of Ra.</p>
+            
+            <div style="background: rgba(139, 69, 19, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0; text-align: left; font-size: 16px;">
+                <div style="margin-bottom: 5px;">✓ Returned 10 Artifacts</div>
+                <div style="margin-bottom: 5px;">✓ Defeated Apophis</div>
+                <div style="margin-bottom: 5px;">✓ Saved the Sunlight</div>
+                <div>✓ Blessed by Ra</div>
+            </div>
+
+            <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="text-align: left; font-size: 14px; line-height: 1.4;">
+                    <strong>Signed:</strong> Prof. Jones<br>
+                    <strong>Witness:</strong> Ra-Horakhty<br>
+                    <span id="cert-date" style="color: #8b4513;"></span>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 12px; margin-bottom: 5px; font-style: italic;">"The darkness is gone.<br>The Sun rises forever."</p>
+                    <img src="4.png" width="60" style="filter: sepia(1) saturate(2);">
+                </div>
             </div>
         </div>
     </div>
@@ -181,11 +211,11 @@
 <script>
     let playerData = {};
     const questions = [
-        { id: 'firstName', text: 'First Name?', placeholder: 'Enter...' },
-        { id: 'lastName', text: 'Last Name?', placeholder: 'Enter...' },
-        { id: 'age', text: 'Your Age?', placeholder: 'Enter...' },
-        { id: 'country', text: 'Country?', placeholder: 'Enter...' },
-        { id: 'city', text: 'City?', placeholder: 'Enter...' }
+        { id: 'firstName', text: 'Speak your First Name, Hero:', placeholder: 'Enter name...' },
+        { id: 'lastName', text: 'And what is your Family Name?', placeholder: 'Enter last name...' },
+        { id: 'age', text: 'How many winters have you seen? (Age)', placeholder: 'Your age...' },
+        { id: 'country', text: 'In which Lands were you born?', placeholder: 'Country...' },
+        { id: 'city', text: 'What City calls you its own?', placeholder: 'City...' }
     ];
 
     let currentIdx = 0;
@@ -227,11 +257,13 @@
     function showQuestion() {
         const q = questions[currentIdx];
         document.getElementById('question-content').innerHTML = `
-            <p style="font-size:22px">${q.text}</p>
-            <input type="text" id="answer-input" autocomplete="off">
-            <br><button class="choice-btn" id="submit-ans">RECORD</button>
+            <p style="font-size:22px; color: #fff;">${q.text}</p>
+            <input type="text" id="answer-input" autocomplete="off" placeholder="${q.placeholder}">
+            <br><button class="choice-btn" id="submit-ans">RECORD IN ETERNITY</button>
         `;
         document.getElementById('tablet').classList.add('active');
+        document.getElementById('answer-input').focus();
+
         document.getElementById('submit-ans').onclick = () => {
             const val = document.getElementById('answer-input').value.trim();
             if (!val) return;
@@ -239,8 +271,15 @@
             document.getElementById('tablet').classList.remove('active');
             new Audio('3.mp3').play().catch(()=>{});
             currentIdx++;
-            document.getElementById('progress-fill').style.width = (currentIdx / questions.length * 100) + '%';
-            if (currentIdx < questions.length) { scarabSpeed += 1.5; setTimeout(createScarab, 600); }
+            
+            const progress = (currentIdx / questions.length * 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-text').innerText = `SACRED RITUAL PROGRESS: ${Math.round(progress)}%`;
+
+            if (currentIdx < questions.length) { 
+                scarabSpeed += 1.2; 
+                setTimeout(createScarab, 700); 
+            }
             else { startFinalCeremony(); }
         };
     }
@@ -248,28 +287,28 @@
     function startFinalCeremony() {
         const flash = document.getElementById('final-flash');
         
-        // 1. Начинаем вспышку
+        // 1. Мощная вспышка
         flash.style.opacity = "1";
         
-        // 2. Запускаем звуки (7.mp3 - 6 сек)
+        // 2. Звук (7.mp3 - 6 сек торжества)
         new Audio('7.mp3').play();
-        setTimeout(() => { new Audio('4.mp3').play(); }, 1000);
+        setTimeout(() => { new Audio('4.mp3').play(); }, 1200);
 
-        // 3. Подготавливаем данные сертификата
+        // 3. Данные
         document.getElementById('cert-name').innerText = (playerData.firstName + " " + playerData.lastName).toUpperCase();
         document.getElementById('cert-age').innerText = playerData.age;
         document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
         document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
 
-        // 4. МЕДЛЕННОЕ появление сертификата (через 2.5 сек после начала вспышки)
+        // 4. Очень медленное появление из света (через 2.5 сек)
         setTimeout(() => {
             document.getElementById('certificate').classList.add('show-final');
         }, 2500);
 
-        // 5. Убираем вспышку, оставляя сертификат
+        // 5. Уход вспышки
         setTimeout(() => {
             flash.style.opacity = "0";
-        }, 5500);
+        }, 5800);
     }
 </script>
 </body>
