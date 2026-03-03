@@ -30,6 +30,30 @@
             transition: opacity 2s ease-in-out;
         }
 
+        /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
+        #start-screen {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0.3); /* Фон вокруг бокса почти прозрачный */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 4000; text-align: center; padding: 40px;
+        }
+
+        /* ТЕМНАЯ ПОДЛОЖКА ТОЛЬКО ДЛЯ ТЕКСТА ТИТУЛЬНИКА */
+        .intro-box {
+            background: rgba(0, 0, 0, 0.85); /* Очень темная подложка */
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 40px rgba(0,0,0,1);
+            max-width: 800px;
+        }
+
+        #start-screen h1 {
+            font-family: 'Cinzel Decorative'; font-size: clamp(30px, 5vw, 55px);
+            text-shadow: 0 0 25px #fcc201; margin: 0 0 20px 0;
+        }
+
+        /* --- ИНТЕРФЕЙС ИГРЫ --- */
         .ui-top {
             position: absolute; top: 20px;
             width: 100%; display: flex; flex-direction: column;
@@ -69,17 +93,6 @@
             50% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #fcc201); }
         }
 
-        #start-screen {
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,0.4);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 4000; text-align: center; padding: 40px;
-        }
-        #start-screen h1 {
-            font-family: 'Cinzel Decorative'; font-size: clamp(30px, 5vw, 55px);
-            text-shadow: 0 0 25px #fcc201; margin-bottom: 20px;
-        }
-
         .tablet {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
@@ -92,16 +105,6 @@
         }
         .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
         
-        /* СТИЛЬ ПОДЛОЖКИ ДЛЯ ТЕКСТА ВОПРОСА */
-        .question-box {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #d4af37;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
-
         input[type="text"], input[type="number"] {
             width: 90%; padding: 12px; margin: 15px 0;
             background: #000; border: 2px solid #d4af37;
@@ -130,13 +133,15 @@
 
 <div class="tomb" id="stage">
     <div id="start-screen">
-        <h1 class="pap-title" style="color:#fcc201; border:none">THE HALL OF RA</h1>
-        <p style="font-size: 22px; max-width: 700px; line-height: 1.6;">
-            The 10 stolen artifacts are returned to the Golden Barge!<br>
-            But to ignite the Solar Heart, Ra must know the story of his Hero.<br><br>
-            <strong>Catch Khepri</strong> and answer the sacred questions to receive your eternal Reward.
-        </p>
-        <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
+        <div class="intro-box">
+            <h1>THE HALL OF RA</h1>
+            <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
+                The 10 stolen artifacts are returned to the Golden Barge!<br>
+                But to ignite the Solar Heart, Ra must know the story of his Hero.<br><br>
+                <strong>Catch Khepri</strong> and answer the sacred questions to receive your eternal Reward.
+            </p>
+            <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
+        </div>
     </div>
 
     <div class="ui-top">
@@ -235,11 +240,8 @@
         const q = questions[currentIdx];
         const content = document.getElementById('question-content');
         const inputType = q.id === 'age' ? 'number' : 'text';
-        // Оборачиваем текст вопроса в блок .question-box для подложки
         content.innerHTML = `
-            <div class="question-box">
-                <p style="font-size:22px; margin:0;">${q.text}</p>
-            </div>
+            <p style="font-size:22px">${q.text}</p>
             <input type="${inputType}" id="answer-input" placeholder="${q.placeholder}" autocomplete="off">
             <br><button class="choice-btn" onclick="submitAnswer()">RECORD</button>
         `;
@@ -270,7 +272,6 @@
     function startFinalCeremony() {
         const flash = document.getElementById('final-flash');
         flash.style.opacity = "1";
-        
         new Audio('7.mp3').play().catch(()=>{});
         new Audio('4.mp3').play().catch(()=>{}); 
 
