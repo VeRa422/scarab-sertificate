@@ -23,34 +23,36 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        #final-flash {
-            position: fixed; inset: 0;
-            background: radial-gradient(circle, #fff 0%, #fcc201 50%, #000 100%);
-            z-index: 4500; opacity: 0; pointer-events: none;
-            transition: opacity 2s ease-in-out;
-        }
-
-        /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
+        /* --- НАЧАЛЬНЫЙ ЭКРАН (FIXED) --- */
         #start-screen {
             position: absolute; inset: 0;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.5);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 4000; text-align: center; padding: 40px;
+            z-index: 4000; text-align: center;
         }
 
         .intro-box {
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9); /* Темная подложка */
             padding: 40px;
             border-radius: 20px;
             border: 2px solid #d4af37;
             box-shadow: 0 0 40px rgba(0,0,0,1);
             max-width: 800px;
+            pointer-events: all; /* Гарантируем кликабельность */
         }
 
         #start-screen h1 {
             font-family: 'Cinzel Decorative'; font-size: clamp(30px, 5vw, 55px);
             text-shadow: 0 0 25px #fcc201; margin: 0 0 20px 0;
         }
+
+        .choice-btn {
+            padding: 15px 30px; background: #111; border: 2px solid #d4af37;
+            color: #fcc201; font-family: 'Cinzel Decorative'; 
+            cursor: pointer; transition: 0.3s; font-size: 18px;
+            position: relative; z-index: 4001;
+        }
+        .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
 
         /* --- ИНТЕРФЕЙС ИГРЫ --- */
         .ui-top {
@@ -61,25 +63,24 @@
 
         .progress-container {
             width: 350px; height: 45px;
-            border: 3px solid #d4af37;
-            background: rgba(0,0,0,0.8);
+            border: 3px solid #d4af37; background: rgba(0,0,0,0.8);
             position: relative; overflow: hidden;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
         .progress-fill {
             position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
             background: linear-gradient(to right, #fcc201, #fffa8a, #d4af37);
-            box-shadow: 0 0 25px #fcc201; transition: width 0.8s ease-out;
+            transition: width 0.8s ease-out;
         }
         .progress-text {
             position: absolute; width: 100%; text-align: center;
             line-height: 45px; font-family: 'Cinzel Decorative';
-            font-size: 18px; color: #fff; text-shadow: 2px 2px 4px #000; z-index: 1;
+            font-size: 18px; color: #fff; z-index: 1;
         }
 
+        /* --- СКАРАБЕЙ --- */
         .scarab-wrap {
             position: absolute; width: 100px; height: 100px; z-index: 10;
-            transition: transform 0.1s linear; cursor: pointer;
+            cursor: pointer;
         }
         .scarab-img {
             width: 100%; height: 100%;
@@ -89,9 +90,10 @@
         .wings-motion { animation: flap 0.35s infinite ease-in-out; }
         @keyframes flap {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 20px #fcc201); }
+            50% { transform: scale(1.1); filter: brightness(1.4); }
         }
 
+        /* --- ПЛАНШЕТ С ВОПРОСАМИ --- */
         .tablet {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
@@ -99,79 +101,33 @@
             background: rgba(15, 10, 0, 0.95);
             border: 3px solid #d4af37; padding: 30px;
             text-align: center; z-index: 1000;
-            opacity: 0; visibility: hidden; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 30px rgba(212, 175, 55, 0.4);
+            opacity: 0; visibility: hidden; transition: 0.5s;
         }
         .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
         
         input[type="text"], input[type="number"] {
-            width: 90%; padding: 12px; margin: 15px 0;
+            width: 80%; padding: 12px; margin: 15px 0;
             background: #000; border: 2px solid #d4af37;
             color: #fcc201; font-family: 'Philosopher'; font-size: 20px; text-align: center;
         }
 
-        .choice-btn {
-            padding: 15px 30px; background: #111; border: 2px solid #d4af37;
-            color: #fcc201; font-family: 'Cinzel Decorative'; cursor: pointer; transition: 0.3s;
-        }
-        .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
-
         /* --- СЕРТИФИКАТ --- */
         #certificate {
-            position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.95);
-            display: none; justify-content: center; align-items: center;
-            z-index: 5000; opacity: 0; transition: opacity 2s ease-in;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; justify-content: center; align-items: center; z-index: 5000;
         }
-
         .papyrus {
-            position: relative;
-            width: 90%; max-width: 600px;
-            background: #e4d5b7;
-            background-image: 
-                linear-gradient(rgba(228, 213, 183, 0.8), rgba(228, 213, 183, 0.8)),
-                url('https://www.transparenttextures.com/patterns/old-map.png');
-            padding: 50px;
-            border: 2px solid #bc9a5c;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(188, 154, 92, 0.3);
-            color: #3d2b1f;
-            text-align: center;
-            transform: rotate(-1deg) scale(0.9);
-            transition: transform 2s ease-out;
+            position: relative; width: 90%; max-width: 600px;
+            background: #e4d5b7 url('https://www.transparenttextures.com/patterns/old-map.png');
+            padding: 50px; border: 2px solid #bc9a5c;
+            color: #3d2b1f; text-align: center;
             clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 99%, 0% 96%, 1% 5%);
         }
+        #certificate.show-final { display: flex; }
 
-        #certificate.show-final { display: flex; opacity: 1; }
-        #certificate.show-final .papyrus { transform: rotate(0deg) scale(1); }
-
-        .pap-title {
-            font-family: 'Cinzel Decorative'; font-size: 28px;
-            color: #8b4513; margin-bottom: 10px;
-            border-bottom: 2px solid #bc9a5c; padding-bottom: 10px;
-        }
-
-        .pap-name {
-            font-family: 'Cinzel Decorative'; font-size: 36px;
-            color: #b8860b; margin: 20px 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .pap-info { 
-            display: flex; justify-content: space-around; 
-            margin: 20px 0; font-weight: bold; border-top: 1px solid #bc9a5c; border-bottom: 1px solid #bc9a5c;
-            padding: 10px 0;
-        }
-
-        .pap-footer {
-            margin-top: 30px; display: flex;
-            justify-content: space-between; align-items: center; text-align: left;
-        }
-
-        .pap-seal {
-            width: 80px; height: 80px;
-            border: 3px double #b8860b; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(184, 134, 11, 0.1);
+        #final-flash {
+            position: fixed; inset: 0; background: #fff;
+            z-index: 4500; opacity: 0; pointer-events: none; transition: opacity 2s;
         }
     </style>
 </head>
@@ -206,38 +162,24 @@
 
     <div id="certificate">
         <div class="papyrus">
-            <div style="position:absolute; top:10px; left:10px; font-size:30px; opacity:0.2">𓂀</div>
-            <div style="position:absolute; top:10px; right:10px; font-size:30px; opacity:0.2">𓄿</div>
-            
-            <h1 class="pap-title">BLESSED BY RA</h1>
-            <p style="font-style: italic; margin: 0;">This sacred scroll proclaims that</p>
-            <div class="pap-name" id="cert-name">HERO NAME</div>
-            
+            <h1 style="font-family: 'Cinzel Decorative'; color: #8b4513;">BLESSED BY RA</h1>
+            <p>This sacred scroll proclaims that</p>
+            <div id="cert-name" style="font-family: 'Cinzel Decorative'; font-size: 32px; color: #b8860b; margin: 15px 0;">HERO NAME</div>
             <div class="pap-body">
-                <p>has successfully restored the Solar Barge and defeated the shadows of Apophis. 
-                   The Light of Egypt shall forever shine upon your path.</p>
-                <div class="pap-info">
-                    <span>Age: <span id="cert-age">—</span></span>
-                    <span>Origins: <span id="cert-from">—</span></span>
-                </div>
-                <div style="text-align: left; font-style: italic;">
-                    <div>✦ 10 Sacred Relics Restored</div>
-                    <div>✦ The Serpent of Chaos Banished</div>
-                    <div>✦ Eternal Solar Blessing Received</div>
+                <p>has successfully restored the Solar Barge. The Light of Egypt shall shine upon you.</p>
+                <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0;">
+                    <span>Age: <span id="cert-age"></span></span>
+                    <span>Origins: <span id="cert-from"></span></span>
                 </div>
             </div>
-
-            <div class="pap-footer">
-                <div>
-                    <strong style="color:#8b4513">Witnessed by:</strong><br>
-                    High Priest of Heliopolis<br>
-                    <span id="cert-date" style="font-size: 14px; opacity: 0.8;"></span>
+            <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="text-align: left; font-size: 14px;">
+                    <strong>Witnessed by:</strong><br>Prof. Jones<br><span id="cert-date"></span>
                 </div>
-                <div class="pap-seal">
-                    <img src="4.png" width="50" style="filter: sepia(1) saturate(2);">
+                <div style="width: 70px; height: 70px; border: 2px solid #b8860b; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <img src="4.png" width="45">
                 </div>
             </div>
-            <div style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); opacity:0.3; font-size:20px">𓋹 𓅓 𓊽</div>
         </div>
     </div>
 </div>
@@ -255,11 +197,13 @@
     let currentIdx = 0;
     let scarabSpeed = 2;
 
-    document.getElementById('init-btn').onclick = () => {
+    // КНОПКА ТЕПЕРЬ ТОЧНО РАБОТАЕТ
+    document.getElementById('init-btn').addEventListener('click', function() {
         document.getElementById('start-screen').style.display = 'none';
-        new Audio('1.mp3').play().catch(()=>{});
+        let audio = new Audio('1.mp3');
+        audio.play().catch(e => console.log("Audio play failed"));
         createScarab();
-    };
+    });
 
     function createScarab() {
         const wrap = document.createElement('div');
@@ -275,4 +219,72 @@
         function drive() {
             if (wrap.dataset.stop === "true") return;
             x += Math.cos(angle) * scarabSpeed;
-            y += Math.sin(
+            y += Math.sin(angle) * scarabSpeed;
+            if (x < 0 || x > window.innerWidth - 100) angle = Math.PI - angle;
+            if (y < 120 || y > window.innerHeight - 100) angle = -angle;
+            wrap.style.left = x + 'px'; wrap.style.top = y + 'px';
+            wrap.style.transform = `rotate(${angle + 1.57}rad)`;
+            requestAnimationFrame(drive);
+        }
+        drive();
+
+        wrap.onclick = () => {
+            new Audio('2.mp3').play().catch(()=>{});
+            wrap.dataset.stop = "true"; wrap.remove();
+            showQuestion();
+        };
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        const content = document.getElementById('question-content');
+        content.innerHTML = `
+            <p style="font-size:22px">${q.text}</p>
+            <input type="text" id="answer-input" placeholder="${q.placeholder}" autocomplete="off">
+            <br><button class="choice-btn" id="submit-ans">RECORD</button>
+        `;
+        document.getElementById('tablet').classList.add('active');
+        document.getElementById('answer-input').focus();
+        
+        document.getElementById('submit-ans').onclick = submitAnswer;
+    }
+
+    function submitAnswer() {
+        const val = document.getElementById('answer-input').value.trim();
+        if (!val) return;
+        playerData[questions[currentIdx].id] = val;
+        document.getElementById('tablet').classList.remove('active');
+        new Audio('3.mp3').play().catch(()=>{});
+
+        currentIdx++;
+        const progress = (currentIdx / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = progress + '%';
+        document.getElementById('progress-text').innerText = `RITUAL: ${Math.round(progress)}%`;
+
+        if (currentIdx < questions.length) {
+            scarabSpeed += 1.5;
+            setTimeout(createScarab, 600);
+        } else {
+            startFinalCeremony();
+        }
+    }
+
+    function startFinalCeremony() {
+        const flash = document.getElementById('final-flash');
+        flash.style.opacity = "1";
+        new Audio('7.mp3').play().catch(()=>{});
+        new Audio('4.mp3').play().catch(()=>{}); 
+
+        setTimeout(() => {
+            document.getElementById('cert-name').innerText = (playerData.firstName + " " + (playerData.lastName || "")).toUpperCase();
+            document.getElementById('cert-age').innerText = playerData.age;
+            document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
+            document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
+
+            document.getElementById('certificate').classList.add('show-final');
+            flash.style.opacity = "0";
+        }, 2000);
+    }
+</script>
+</body>
+</html>
