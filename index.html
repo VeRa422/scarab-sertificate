@@ -23,7 +23,6 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
         #start-screen {
             position: absolute; inset: 0;
             background: rgba(0,0,0,0.5);
@@ -54,7 +53,6 @@
         }
         .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
 
-        /* --- ИНТЕРФЕЙС ИГРЫ --- */
         .ui-top {
             position: absolute; top: 20px;
             width: 100%; display: flex; flex-direction: column;
@@ -77,7 +75,6 @@
             font-size: 18px; color: #fff; z-index: 1;
         }
 
-        /* --- СКАРАБЕЙ --- */
         .scarab-wrap {
             position: absolute; width: 100px; height: 100px; z-index: 10;
             cursor: pointer;
@@ -93,7 +90,6 @@
             50% { transform: scale(1.1); filter: brightness(1.4); }
         }
 
-        /* --- ПЛАНШЕТ С ВОПРОСАМИ --- */
         .tablet {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
@@ -111,15 +107,14 @@
             color: #fcc201; font-family: 'Philosopher'; font-size: 20px; text-align: center;
         }
 
-        /* --- СЕРТИФИКАТ (ИСПРАВЛЕНО: МЕДЛЕННОЕ ПОЯВЛЕНИЕ) --- */
         #certificate {
             position: fixed; inset: 0; 
             background: rgba(0,0,0,0.95);
-            display: flex; /* Всегда flex, но управляем через opacity */
+            display: flex; 
             justify-content: center; align-items: center; 
             z-index: 5000;
             opacity: 0; visibility: hidden;
-            transition: opacity 3s ease-in-out; /* Медленное проявление папируса */
+            transition: opacity 3s ease-in-out;
         }
         #certificate.show-final { 
             opacity: 1; visibility: visible; 
@@ -134,10 +129,8 @@
             box-shadow: 0 0 50px rgba(252, 194, 1, 0.3);
         }
 
-        /* --- ЗОЛОТАЯ ВСПЫШКА --- */
         #final-flash {
             position: fixed; inset: 0; 
-            /* Золотой градиент вместо белого фона */
             background: radial-gradient(circle, #fff 0%, #fff7cc 30%, #fcc201 100%);
             z-index: 4500; opacity: 0; pointer-events: none; 
             transition: opacity 2s ease-in-out;
@@ -153,9 +146,9 @@
         <div class="intro-box">
             <h1>THE HALL OF RA</h1>
             <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
-                The 10 stolen artifacts are returned to the Golden Barge!<br>
-                But to ignite the Solar Heart, Ra must know the story of his Hero.<br><br>
-                <strong>Catch Khepri</strong> and answer the sacred questions to receive your eternal Reward.
+                The 10 stolen artifacts are returned to the <strong>Golden Barque</strong>!<br>
+                But to <strong>wake up</strong> the Solar Heart, Ra must know the story of his Hero.<br><br>
+                <strong>Catch Khepri</strong> and answer the sacred questions to complete the ritual.
             </p>
             <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
         </div>
@@ -179,7 +172,7 @@
             <p>This sacred scroll proclaims that</p>
             <div id="cert-name" style="font-family: 'Cinzel Decorative'; font-size: 32px; color: #b8860b; margin: 15px 0;">HERO NAME</div>
             <div class="pap-body">
-                <p>has successfully restored the Solar Barge. The Light of Egypt shall shine upon you.</p>
+                <p>has successfully restored the <strong>Golden Barque</strong>. The Light of Egypt shall shine upon you.</p>
                 <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0;">
                     <span>Age: <span id="cert-age"></span></span>
                     <span>Origins: <span id="cert-from"></span></span>
@@ -208,12 +201,12 @@
     ];
 
     let currentIdx = 0;
-    let scarabSpeed = 2;
+    // ФИКСИРОВАННАЯ УМЕРЕННАЯ СКОРОСТЬ
+    let scarabSpeed = 3.5;
 
     document.getElementById('init-btn').addEventListener('click', function() {
         document.getElementById('start-screen').style.display = 'none';
-        let audio = new Audio('1.mp3');
-        audio.play().catch(e => console.log("Audio play failed"));
+        new Audio('1.mp3').play().catch(()=>{});
         createScarab();
     });
 
@@ -257,7 +250,6 @@
         `;
         document.getElementById('tablet').classList.add('active');
         document.getElementById('answer-input').focus();
-        
         document.getElementById('submit-ans').onclick = submitAnswer;
     }
 
@@ -274,7 +266,7 @@
         document.getElementById('progress-text').innerText = `RITUAL: ${Math.round(progress)}%`;
 
         if (currentIdx < questions.length) {
-            scarabSpeed += 1.5;
+            // СКОРОСТЬ БОЛЬШЕ НЕ УВЕЛИЧИВАЕТСЯ
             setTimeout(createScarab, 600);
         } else {
             startFinalCeremony();
@@ -283,26 +275,20 @@
 
     function startFinalCeremony() {
         const flash = document.getElementById('final-flash');
-        
-        // Включаем золотой свет
         flash.style.opacity = "1";
         
-        // Запускаем звук 7.mp3 (6 сек) и финальный 4.mp3
         new Audio('7.mp3').play().catch(()=>{});
         setTimeout(() => { new Audio('4.mp3').play().catch(()=>{}); }, 1000);
 
-        // Заполняем данные
         document.getElementById('cert-name').innerText = (playerData.firstName + " " + (playerData.lastName || "")).toUpperCase();
         document.getElementById('cert-age').innerText = playerData.age;
         document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
         document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
 
-        // Показываем сертификат МЕДЛЕННО (через 3 секунды после начала вспышки)
         setTimeout(() => {
             document.getElementById('certificate').classList.add('show-final');
         }, 3000);
 
-        // Гасим вспышку чуть позже, чтобы сертификат уже был виден
         setTimeout(() => {
             flash.style.opacity = "0";
         }, 6000);
