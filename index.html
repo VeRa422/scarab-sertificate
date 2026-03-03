@@ -33,14 +33,13 @@
         /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
         #start-screen {
             position: absolute; inset: 0;
-            background: rgba(0,0,0,0.3); /* Фон вокруг бокса почти прозрачный */
+            background: rgba(0,0,0,0.3);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 4000; text-align: center; padding: 40px;
         }
 
-        /* ТЕМНАЯ ПОДЛОЖКА ТОЛЬКО ДЛЯ ТЕКСТА ТИТУЛЬНИКА */
         .intro-box {
-            background: rgba(0, 0, 0, 0.85); /* Очень темная подложка */
+            background: rgba(0, 0, 0, 0.85);
             padding: 40px;
             border-radius: 20px;
             border: 2px solid #d4af37;
@@ -117,129 +116,129 @@
         }
         .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
 
-<style>
-    /* ... (предыдущие стили оставляем без изменений до #certificate) ... */
+        /* --- СЕРТИФИКАТ --- */
+        #certificate {
+            position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.95);
+            display: none; justify-content: center; align-items: center;
+            z-index: 5000; opacity: 0; transition: opacity 2s ease-in;
+        }
 
-    #certificate {
-        position: fixed; inset: 0; 
-        background: rgba(0,0,0,0.95);
-        display: none; justify-content: center; align-items: center;
-        z-index: 5000; opacity: 0; transition: opacity 2s ease-in;
-    }
+        .papyrus {
+            position: relative;
+            width: 90%; max-width: 600px;
+            background: #e4d5b7;
+            background-image: 
+                linear-gradient(rgba(228, 213, 183, 0.8), rgba(228, 213, 183, 0.8)),
+                url('https://www.transparenttextures.com/patterns/old-map.png');
+            padding: 50px;
+            border: 2px solid #bc9a5c;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(188, 154, 92, 0.3);
+            color: #3d2b1f;
+            text-align: center;
+            transform: rotate(-1deg) scale(0.9);
+            transition: transform 2s ease-out;
+            clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 99%, 0% 96%, 1% 5%);
+        }
 
-    .papyrus {
-        position: relative;
-        width: 90%; max-width: 600px;
-        background: #e4d5b7; /* Цвет старой бумаги */
-        background-image: 
-            linear-gradient(rgba(228, 213, 183, 0.8), rgba(228, 213, 183, 0.8)),
-            url('https://www.transparenttextures.com/patterns/old-map.png');
-        padding: 50px;
-        border: 2px solid #bc9a5c;
-        box-shadow: 
-            0 0 50px rgba(0,0,0,0.8),
-            inset 0 0 100px rgba(188, 154, 92, 0.3);
-        color: #3d2b1f; /* Темно-коричневый для текста */
-        text-align: center;
-        transform: rotate(-1deg) scale(0.9);
-        transition: transform 2s ease-out;
-        /* Эффект рваного края */
-        clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 99%, 0% 96%, 1% 5%);
-    }
+        #certificate.show-final { display: flex; opacity: 1; }
+        #certificate.show-final .papyrus { transform: rotate(0deg) scale(1); }
 
-    #certificate.show-final { display: flex; opacity: 1; }
-    #certificate.show-final .papyrus { transform: rotate(0deg) scale(1); }
+        .pap-title {
+            font-family: 'Cinzel Decorative'; font-size: 28px;
+            color: #8b4513; margin-bottom: 10px;
+            border-bottom: 2px solid #bc9a5c; padding-bottom: 10px;
+        }
 
-    .pap-title {
-        font-family: 'Cinzel Decorative';
-        font-size: 28px;
-        color: #8b4513;
-        margin-bottom: 10px;
-        border-bottom: 2px solid #bc9a5c;
-        padding-bottom: 10px;
-    }
+        .pap-name {
+            font-family: 'Cinzel Decorative'; font-size: 36px;
+            color: #b8860b; margin: 20px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
 
-    .pap-name {
-        font-family: 'Cinzel Decorative';
-        font-size: 36px;
-        color: #b8860b;
-        margin: 20px 0;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
+        .pap-info { 
+            display: flex; justify-content: space-around; 
+            margin: 20px 0; font-weight: bold; border-top: 1px solid #bc9a5c; border-bottom: 1px solid #bc9a5c;
+            padding: 10px 0;
+        }
 
-    .pap-body { font-size: 18px; line-height: 1.5; }
-    
-    .pap-info { 
-        display: flex; justify-content: space-around; 
-        margin: 20px 0; font-weight: bold; border-top: 1px solid #bc9a5c; border-bottom: 1px solid #bc9a5c;
-        padding: 10px 0;
-    }
+        .pap-footer {
+            margin-top: 30px; display: flex;
+            justify-content: space-between; align-items: center; text-align: left;
+        }
 
-    .pap-achievements {
-        text-align: left;
-        display: inline-block;
-        margin: 20px 0;
-        font-style: italic;
-    }
+        .pap-seal {
+            width: 80px; height: 80px;
+            border: 3px double #b8860b; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(184, 134, 11, 0.1);
+        }
+    </style>
+</head>
+<body>
 
-    .pap-footer {
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-    }
+<div id="final-flash"></div>
 
-    .pap-seal {
-        position: relative;
-        width: 80px; height: 80px;
-        border: 3px double #b8860b;
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        background: rgba(184, 134, 11, 0.1);
-    }
+<div class="tomb" id="stage">
+    <div id="start-screen">
+        <div class="intro-box">
+            <h1>THE HALL OF RA</h1>
+            <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
+                The 10 stolen artifacts are returned to the Golden Barge!<br>
+                But to ignite the Solar Heart, Ra must know the story of his Hero.<br><br>
+                <strong>Catch Khepri</strong> and answer the sacred questions to receive your eternal Reward.
+            </p>
+            <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
+        </div>
+    </div>
 
-    .pap-date { font-size: 14px; opacity: 0.8; }
-</style>
+    <div class="ui-top">
+        <div class="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-text" id="progress-text">RITUAL PROGRESS: 0%</div>
+        </div>
+    </div>
 
-<div id="certificate">
-    <div class="papyrus">
-        <div style="position:absolute; top:10px; left:10px; font-size:30px; opacity:0.2">𓂀</div>
-        <div style="position:absolute; top:10px; right:10px; font-size:30px; opacity:0.2">𓄿</div>
-        
-        <h1 class="pap-title">BLESSED BY RA</h1>
-        <p style="font-style: italic; margin: 0;">This sacred scroll proclaims that</p>
-        
-        <div class="pap-name" id="cert-name">HERO NAME</div>
-        
-        <div class="pap-body">
-            <p>has successfully restored the Solar Barge and defeated the shadows of Apophis. 
-               The Light of Egypt shall forever shine upon your path.</p>
+    <div class="tablet" id="tablet">
+        <h2 style="font-family:'Cinzel Decorative'; font-size: 22px;">SACRED SCROLL</h2>
+        <div id="question-content"></div>
+    </div>
+
+    <div id="certificate">
+        <div class="papyrus">
+            <div style="position:absolute; top:10px; left:10px; font-size:30px; opacity:0.2">𓂀</div>
+            <div style="position:absolute; top:10px; right:10px; font-size:30px; opacity:0.2">𓄿</div>
             
-            <div class="pap-info">
-                <span>Age: <span id="cert-age">—</span></span>
-                <span>Origins: <span id="cert-from">—</span></span>
+            <h1 class="pap-title">BLESSED BY RA</h1>
+            <p style="font-style: italic; margin: 0;">This sacred scroll proclaims that</p>
+            <div class="pap-name" id="cert-name">HERO NAME</div>
+            
+            <div class="pap-body">
+                <p>has successfully restored the Solar Barge and defeated the shadows of Apophis. 
+                   The Light of Egypt shall forever shine upon your path.</p>
+                <div class="pap-info">
+                    <span>Age: <span id="cert-age">—</span></span>
+                    <span>Origins: <span id="cert-from">—</span></span>
+                </div>
+                <div style="text-align: left; font-style: italic;">
+                    <div>✦ 10 Sacred Relics Restored</div>
+                    <div>✦ The Serpent of Chaos Banished</div>
+                    <div>✦ Eternal Solar Blessing Received</div>
+                </div>
             </div>
 
-            <div class="pap-achievements">
-                <div>✦ 10 Sacred Relics Restored</div>
-                <div>✦ The Serpent of Chaos Banished</div>
-                <div>✦ Eternal Solar Blessing Received</div>
+            <div class="pap-footer">
+                <div>
+                    <strong style="color:#8b4513">Witnessed by:</strong><br>
+                    High Priest of Heliopolis<br>
+                    <span id="cert-date" style="font-size: 14px; opacity: 0.8;"></span>
+                </div>
+                <div class="pap-seal">
+                    <img src="4.png" width="50" style="filter: sepia(1) saturate(2);">
+                </div>
             </div>
+            <div style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); opacity:0.3; font-size:20px">𓋹 𓅓 𓊽</div>
         </div>
-
-        <div class="pap-footer">
-            <div class="pap-signed">
-                <strong style="color:#8b4513">Witnessed by:</strong><br>
-                High Priest of Heliopolis<br>
-                <span id="cert-date" class="pap-date"></span>
-            </div>
-            <div class="pap-seal">
-                <img src="4.png" width="50" style="filter: sepia(1) saturate(2);">
-            </div>
-        </div>
-
-        <div style="position:absolute; bottom:10px; left:50%; transform:translateX(-50%); opacity:0.3; font-size:20px">𓋹 𓅓 𓊽</div>
     </div>
 </div>
 
@@ -276,73 +275,4 @@
         function drive() {
             if (wrap.dataset.stop === "true") return;
             x += Math.cos(angle) * scarabSpeed;
-            y += Math.sin(angle) * scarabSpeed;
-            if (x < 0 || x > window.innerWidth - 100) angle = Math.PI - angle;
-            if (y < 120 || y > window.innerHeight - 100) angle = -angle;
-            wrap.style.left = x + 'px'; wrap.style.top = y + 'px';
-            wrap.style.transform = `rotate(${angle + 1.57}rad)`;
-            requestAnimationFrame(drive);
-        }
-        drive();
-
-        wrap.onclick = () => {
-            new Audio('2.mp3').play().catch(()=>{});
-            wrap.dataset.stop = "true"; wrap.remove();
-            showQuestion();
-        };
-    }
-
-    function showQuestion() {
-        const q = questions[currentIdx];
-        const content = document.getElementById('question-content');
-        const inputType = q.id === 'age' ? 'number' : 'text';
-        content.innerHTML = `
-            <p style="font-size:22px">${q.text}</p>
-            <input type="${inputType}" id="answer-input" placeholder="${q.placeholder}" autocomplete="off">
-            <br><button class="choice-btn" onclick="submitAnswer()">RECORD</button>
-        `;
-        document.getElementById('tablet').classList.add('active');
-        document.getElementById('answer-input').focus();
-    }
-
-    function submitAnswer() {
-        const val = document.getElementById('answer-input').value.trim();
-        if (!val) return;
-        playerData[questions[currentIdx].id] = val;
-        document.getElementById('tablet').classList.remove('active');
-        new Audio('3.mp3').play().catch(()=>{});
-
-        currentIdx++;
-        const progress = (currentIdx / questions.length) * 100;
-        document.getElementById('progress-fill').style.width = progress + '%';
-        document.getElementById('progress-text').innerText = `RITUAL: ${Math.round(progress)}%`;
-
-        if (currentIdx < questions.length) {
-            scarabSpeed += 1.2;
-            setTimeout(createScarab, 600);
-        } else {
-            startFinalCeremony();
-        }
-    }
-
-    function startFinalCeremony() {
-        const flash = document.getElementById('final-flash');
-        flash.style.opacity = "1";
-        new Audio('7.mp3').play().catch(()=>{});
-        new Audio('4.mp3').play().catch(()=>{}); 
-
-        setTimeout(() => {
-            document.getElementById('cert-name').innerText = (playerData.firstName + " " + playerData.lastName).toUpperCase();
-            document.getElementById('cert-age').innerText = playerData.age;
-            document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
-            document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
-
-            const cert = document.getElementById('certificate');
-            cert.classList.add('show-final');
-            flash.style.opacity = "0";
-        }, 2000);
-    }
-</script>
-</body>
-</html>
-
+            y += Math.sin(
