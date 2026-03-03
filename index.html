@@ -23,7 +23,7 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- НАЧАЛЬНЫЙ ЭКРАН (FIXED) --- */
+        /* --- НАЧАЛЬНЫЙ ЭКРАН --- */
         #start-screen {
             position: absolute; inset: 0;
             background: rgba(0,0,0,0.5);
@@ -32,25 +32,19 @@
         }
 
         .intro-box {
-            background: rgba(0, 0, 0, 0.9); /* Темная подложка */
+            background: rgba(0, 0, 0, 0.9);
             padding: 40px;
             border-radius: 20px;
             border: 2px solid #d4af37;
             box-shadow: 0 0 40px rgba(0,0,0,1);
             max-width: 800px;
-            pointer-events: all; /* Гарантируем кликабельность */
-        }
-
-        #start-screen h1 {
-            font-family: 'Cinzel Decorative'; font-size: clamp(30px, 5vw, 55px);
-            text-shadow: 0 0 25px #fcc201; margin: 0 0 20px 0;
+            pointer-events: all;
         }
 
         .choice-btn {
             padding: 15px 30px; background: #111; border: 2px solid #d4af37;
             color: #fcc201; font-family: 'Cinzel Decorative'; 
             cursor: pointer; transition: 0.3s; font-size: 18px;
-            position: relative; z-index: 4001;
         }
         .choice-btn:hover { background: #fcc201; color: #000; box-shadow: 0 0 20px #fcc201; }
 
@@ -105,29 +99,37 @@
         }
         .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
         
-        input[type="text"], input[type="number"] {
+        input[type="text"] {
             width: 80%; padding: 12px; margin: 15px 0;
             background: #000; border: 2px solid #d4af37;
             color: #fcc201; font-family: 'Philosopher'; font-size: 20px; text-align: center;
         }
 
-        /* --- СЕРТИФИКАТ --- */
-        #certificate {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            display: none; justify-content: center; align-items: center; z-index: 5000;
+        /* --- ФИНАЛЬНЫЙ ЭФФЕКТ И СЕРТИФИКАТ (UPDATED) --- */
+        #final-flash {
+            position: fixed; inset: 0; 
+            /* Больше золотого свечения */
+            background: radial-gradient(circle, #fff 0%, #fff7cc 40%, #fcc201 100%);
+            z-index: 4500; opacity: 0; pointer-events: none; 
+            transition: opacity 2.5s ease-in-out;
         }
+
+        #certificate {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 5000; 
+            opacity: 0; visibility: hidden;
+            transition: opacity 3.5s ease-in-out; /* Очень медленное появление */
+        }
+        #certificate.show-final { opacity: 1; visibility: visible; }
+
         .papyrus {
             position: relative; width: 90%; max-width: 600px;
             background: #e4d5b7 url('https://www.transparenttextures.com/patterns/old-map.png');
             padding: 50px; border: 2px solid #bc9a5c;
             color: #3d2b1f; text-align: center;
+            box-shadow: 0 0 100px rgba(252, 194, 1, 0.4);
             clip-path: polygon(2% 0%, 98% 1%, 100% 4%, 99% 95%, 97% 100%, 3% 99%, 0% 96%, 1% 5%);
-        }
-        #certificate.show-final { display: flex; }
-
-        #final-flash {
-            position: fixed; inset: 0; background: #fff;
-            z-index: 4500; opacity: 0; pointer-events: none; transition: opacity 2s;
         }
     </style>
 </head>
@@ -140,9 +142,8 @@
         <div class="intro-box">
             <h1>THE HALL OF RA</h1>
             <p style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
-                The 10 stolen artifacts are returned to the Golden Barge!<br>
-                But to ignite the Solar Heart, Ra must know the story of his Hero.<br><br>
-                <strong>Catch Khepri</strong> and answer the sacred questions to receive your eternal Reward.
+                The artifacts are restored! Ignite the Solar Heart.<br>
+                Catch Khepri to receive your Eternal Reward.
             </p>
             <button class="choice-btn" id="init-btn">ACTIVATE THE RITUAL</button>
         </div>
@@ -156,7 +157,6 @@
     </div>
 
     <div class="tablet" id="tablet">
-        <h2 style="font-family:'Cinzel Decorative'; font-size: 22px;">SACRED SCROLL</h2>
         <div id="question-content"></div>
     </div>
 
@@ -165,20 +165,14 @@
             <h1 style="font-family: 'Cinzel Decorative'; color: #8b4513;">BLESSED BY RA</h1>
             <p>This sacred scroll proclaims that</p>
             <div id="cert-name" style="font-family: 'Cinzel Decorative'; font-size: 32px; color: #b8860b; margin: 15px 0;">HERO NAME</div>
-            <div class="pap-body">
-                <p>has successfully restored the Solar Barge. The Light of Egypt shall shine upon you.</p>
-                <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0;">
-                    <span>Age: <span id="cert-age"></span></span>
-                    <span>Origins: <span id="cert-from"></span></span>
-                </div>
+            <p>has successfully restored the Solar Barge. The Light of Egypt shall shine upon you.</p>
+            <div style="display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0;">
+                <span>Age: <span id="cert-age"></span></span>
+                <span>Origins: <span id="cert-from"></span></span>
             </div>
             <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
-                <div style="text-align: left; font-size: 14px;">
-                    <strong>Witnessed by:</strong><br>Prof. Jones<br><span id="cert-date"></span>
-                </div>
-                <div style="width: 70px; height: 70px; border: 2px solid #b8860b; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <img src="4.png" width="45">
-                </div>
+                <div style="text-align: left; font-size: 14px;">Witnessed by Prof. Jones<br><span id="cert-date"></span></div>
+                <img src="4.png" width="50">
             </div>
         </div>
     </div>
@@ -187,30 +181,26 @@
 <script>
     let playerData = {};
     const questions = [
-        { id: 'firstName', text: 'What is your first name?', placeholder: 'First Name...' },
-        { id: 'lastName', text: 'What is your last name?', placeholder: 'Last Name...' },
-        { id: 'age', text: 'What is your age?', placeholder: 'Your age...' },
-        { id: 'country', text: 'What is your country?', placeholder: 'Country...' },
-        { id: 'city', text: 'What is your city?', placeholder: 'City...' }
+        { id: 'firstName', text: 'First Name?', placeholder: 'Enter...' },
+        { id: 'lastName', text: 'Last Name?', placeholder: 'Enter...' },
+        { id: 'age', text: 'Your Age?', placeholder: 'Enter...' },
+        { id: 'country', text: 'Country?', placeholder: 'Enter...' },
+        { id: 'city', text: 'City?', placeholder: 'Enter...' }
     ];
 
     let currentIdx = 0;
-    let scarabSpeed = 2;
+    let scarabSpeed = 2.5;
 
-    // КНОПКА ТЕПЕРЬ ТОЧНО РАБОТАЕТ
-    document.getElementById('init-btn').addEventListener('click', function() {
+    document.getElementById('init-btn').onclick = () => {
         document.getElementById('start-screen').style.display = 'none';
-        let audio = new Audio('1.mp3');
-        audio.play().catch(e => console.log("Audio play failed"));
+        new Audio('1.mp3').play().catch(()=>{});
         createScarab();
-    });
+    };
 
     function createScarab() {
         const wrap = document.createElement('div');
         wrap.className = 'scarab-wrap';
-        const img = document.createElement('div');
-        img.className = 'scarab-img wings-motion';
-        wrap.appendChild(img);
+        wrap.innerHTML = '<div class="scarab-img wings-motion"></div>';
         document.getElementById('stage').appendChild(wrap);
 
         let x = Math.random() * (window.innerWidth - 100), y = Math.random() * (window.innerHeight - 300) + 150;
@@ -218,8 +208,7 @@
 
         function drive() {
             if (wrap.dataset.stop === "true") return;
-            x += Math.cos(angle) * scarabSpeed;
-            y += Math.sin(angle) * scarabSpeed;
+            x += Math.cos(angle) * scarabSpeed; y += Math.sin(angle) * scarabSpeed;
             if (x < 0 || x > window.innerWidth - 100) angle = Math.PI - angle;
             if (y < 120 || y > window.innerHeight - 100) angle = -angle;
             wrap.style.left = x + 'px'; wrap.style.top = y + 'px';
@@ -237,53 +226,50 @@
 
     function showQuestion() {
         const q = questions[currentIdx];
-        const content = document.getElementById('question-content');
-        content.innerHTML = `
+        document.getElementById('question-content').innerHTML = `
             <p style="font-size:22px">${q.text}</p>
-            <input type="text" id="answer-input" placeholder="${q.placeholder}" autocomplete="off">
+            <input type="text" id="answer-input" autocomplete="off">
             <br><button class="choice-btn" id="submit-ans">RECORD</button>
         `;
         document.getElementById('tablet').classList.add('active');
-        document.getElementById('answer-input').focus();
-        
-        document.getElementById('submit-ans').onclick = submitAnswer;
-    }
-
-    function submitAnswer() {
-        const val = document.getElementById('answer-input').value.trim();
-        if (!val) return;
-        playerData[questions[currentIdx].id] = val;
-        document.getElementById('tablet').classList.remove('active');
-        new Audio('3.mp3').play().catch(()=>{});
-
-        currentIdx++;
-        const progress = (currentIdx / questions.length) * 100;
-        document.getElementById('progress-fill').style.width = progress + '%';
-        document.getElementById('progress-text').innerText = `RITUAL: ${Math.round(progress)}%`;
-
-        if (currentIdx < questions.length) {
-            scarabSpeed += 1.5;
-            setTimeout(createScarab, 600);
-        } else {
-            startFinalCeremony();
-        }
+        document.getElementById('submit-ans').onclick = () => {
+            const val = document.getElementById('answer-input').value.trim();
+            if (!val) return;
+            playerData[questions[currentIdx].id] = val;
+            document.getElementById('tablet').classList.remove('active');
+            new Audio('3.mp3').play().catch(()=>{});
+            currentIdx++;
+            document.getElementById('progress-fill').style.width = (currentIdx / questions.length * 100) + '%';
+            if (currentIdx < questions.length) { scarabSpeed += 1.5; setTimeout(createScarab, 600); }
+            else { startFinalCeremony(); }
+        };
     }
 
     function startFinalCeremony() {
         const flash = document.getElementById('final-flash');
+        
+        // 1. Начинаем вспышку
         flash.style.opacity = "1";
-        new Audio('7.mp3').play().catch(()=>{});
-        new Audio('4.mp3').play().catch(()=>{}); 
+        
+        // 2. Запускаем звуки (7.mp3 - 6 сек)
+        new Audio('7.mp3').play();
+        setTimeout(() => { new Audio('4.mp3').play(); }, 1000);
 
+        // 3. Подготавливаем данные сертификата
+        document.getElementById('cert-name').innerText = (playerData.firstName + " " + playerData.lastName).toUpperCase();
+        document.getElementById('cert-age').innerText = playerData.age;
+        document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
+        document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
+
+        // 4. МЕДЛЕННОЕ появление сертификата (через 2.5 сек после начала вспышки)
         setTimeout(() => {
-            document.getElementById('cert-name').innerText = (playerData.firstName + " " + (playerData.lastName || "")).toUpperCase();
-            document.getElementById('cert-age').innerText = playerData.age;
-            document.getElementById('cert-from').innerText = playerData.city + ", " + playerData.country;
-            document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
-
             document.getElementById('certificate').classList.add('show-final');
+        }, 2500);
+
+        // 5. Убираем вспышку, оставляя сертификат
+        setTimeout(() => {
             flash.style.opacity = "0";
-        }, 2000);
+        }, 5500);
     }
 </script>
 </body>
