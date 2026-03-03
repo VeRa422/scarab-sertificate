@@ -71,7 +71,7 @@
 
         #start-screen {
             position: absolute; inset: 0;
-            background: rgba(0,0,0,0.4); /* Сделано прозрачнее по запросу */
+            background: rgba(0,0,0,0.4);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 4000; text-align: center; padding: 40px;
         }
@@ -92,6 +92,16 @@
         }
         .tablet.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
         
+        /* СТИЛЬ ПОДЛОЖКИ ДЛЯ ТЕКСТА ВОПРОСА */
+        .question-box {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #d4af37;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
         input[type="text"], input[type="number"] {
             width: 90%; padding: 12px; margin: 15px 0;
             background: #000; border: 2px solid #d4af37;
@@ -225,8 +235,11 @@
         const q = questions[currentIdx];
         const content = document.getElementById('question-content');
         const inputType = q.id === 'age' ? 'number' : 'text';
+        // Оборачиваем текст вопроса в блок .question-box для подложки
         content.innerHTML = `
-            <p style="font-size:22px">${q.text}</p>
+            <div class="question-box">
+                <p style="font-size:22px; margin:0;">${q.text}</p>
+            </div>
             <input type="${inputType}" id="answer-input" placeholder="${q.placeholder}" autocomplete="off">
             <br><button class="choice-btn" onclick="submitAnswer()">RECORD</button>
         `;
@@ -258,9 +271,7 @@
         const flash = document.getElementById('final-flash');
         flash.style.opacity = "1";
         
-        // Добавлен звук 7.mp3 при появлении сертификата
         new Audio('7.mp3').play().catch(()=>{});
-        // Финальный звук 4.mp3
         new Audio('4.mp3').play().catch(()=>{}); 
 
         setTimeout(() => {
